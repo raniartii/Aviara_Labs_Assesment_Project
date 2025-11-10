@@ -15,7 +15,9 @@ This project demonstrates a **modular multi-agent system** built using **n8n**, 
 
 Each agent acts as an autonomous component passing structured data downstream — simulating a scalable AI orchestration architecture.
 
-##### **Link for workflow json:**https://drive.google.com/drive/folders/1CUm13o-X8XpJiveO6-X1G2I_CDuXOknj?usp=sharing 
+##### **Link for workflow json:**https://drive.google.com/drive/folders/1CUm13o-X8XpJiveO6-X1G2I_CDuXOknj?usp=sharing
+
+**Spreadsheet link:** https://docs.google.com/spreadsheets/d/1p_dsc8N7aWOCTcm4kg6UECUX3yWpmPP0cT-3xRPLgJQ/edit?gid=0#gid=0
 
 ---
 
