@@ -1,0 +1,155 @@
+# 🤖 Multi-Agent AI Content Pipeline — Built in n8n
+
+> An end-to-end AI-driven automation workflow for researching trending topics, generating creative prompts, creating blog + video content, and submitting it for human review — fully orchestrated inside **n8n**.
+
+---
+
+## 🧠 Overview
+
+This project demonstrates a **modular multi-agent system** built using **n8n**, where each agent is responsible for a stage of the AI content production lifecycle:
+
+1. **ContentResearch Agent** — Gathers trending AI topics from Google Trends & YouTube.
+2. **Prompt Agent** — Uses OpenAI to generate creative blog/video prompts.
+3. **ContentCreator Agent** — Creates blog posts & video content (mocked for demo).
+4. **ContentSubmission Agent** — Submits all generated content to Google Sheets for human review.
+
+Each agent acts as an autonomous component passing structured data downstream — simulating a scalable AI orchestration architecture.
+
+##### **Link for workflow json:**https://drive.google.com/drive/folders/1CUm13o-X8XpJiveO6-X1G2I_CDuXOknj?usp=sharing 
+
+---
+
+## ⚙️ Tech Stack
+
+| Component                      | Tool / API                          | Purpose                                |
+| ------------------------------ | ----------------------------------- | -------------------------------------- |
+| **Automation Framework**       | n8n                                 | Workflow orchestration                 |
+| **LLM / Prompt Generation**    | OpenAI API (GPT-4)                  | Generates structured prompts & content |
+| **Data Sources**               | Google Trends RSS, YouTube Data API | Fetch trending topics                  |
+| **Storage / Review**           | Google Sheets API                   | Store and manage outputs               |
+| **Notification (Optional)**    | Slack / Gmail                       | Notify reviewers on new content        |
+| **Future Integration (Video)** | Runway / Gemini API                 | AI video generation                    |
+
+---
+
+## 🧩 Workflow Architecture
+
+```flow
+st=>start: Trigger (Manual / Schedule)
+init=>operation: InitPayload
+split=>operation: SourceSplitter
+route=>condition: RouteBySource?
+gt=>operation: HTTP Request\nGoogle Trends (RSS)
+yt=>operation: HTTP Request\nYouTube Data API
+parseGT=>operation: ParseTrendsTopics
+parseYT=>operation: ParseYouTubeVideos
+merge=>operation: MergeSources
+dedupe=>operation: DeduplicateAndRank
+expand=>operation: ExpandTopics
+batch=>operation: SplitInBatches (size=1)
+prompt=>operation: PromptGenerator (OpenAI)
+parsePrompt=>operation: ParsePrompts
+blogCreate=>operation: BlogCreator (OpenAI)
+parseBlog=>operation: ParseBlogOutput
+addKey=>operation: AddMergeKey
+sheetAppend=>operation: SheetAppend_ContentRow (Google Sheets)
+mergeFallback=>operation: MergeManualFallback
+capture=>operation: CaptureSheetRow
+videoSubmit=>operation: VideoSubmit (Mock)
+poll=>operation: PollVideoStatus
+fetch=>operation: FetchVideoResult
+collate=>operation: CollateContent
+sheetUpdate=>operation: SheetUpdateRow
+notify=>operation: NotifyReviewer
+end=>end: Done
+
+st->init->split->route
+route(yes)->gt->parseGT->merge
+route(no)->yt->parseYT->merge
+merge->dedupe->expand->batch->prompt->parsePrompt->blogCreate->parseBlog->addKey->sheetAppend
+sheetAppend->mergeFallback->capture->videoSubmit->poll
+poll(yes)->fetch->collate->sheetUpdate->notify->end
+poll(no)->poll
+```
+
+---
+
+## 🧮 Data Flow Summary
+
+| Stage                 | Description                                    | Example Output                                |
+| --------------------- | ---------------------------------------------- | --------------------------------------------- |
+| **Research**          | Collects trending AI topics                    | `AI Process Automation`, `RPA vs AI`          |
+| **Prompt Generation** | Creates creative content prompts               | Blog + Video prompts JSON                     |
+| **Content Creation**  | Generates long-form blogs & mock video prompts | Markdown + Script outlines                    |
+| **Submission**        | Appends results to Google Sheets               | Topic, Prompt, Blog, Video, Timestamp, Status |
+
+---
+
+## 📸 Screenshots
+
+![Workflow Canvas](/media/artir/Data1/coding/projects/Company_Assessments/Aviara_Labs/Pipeline&Docs/screenshots/Workflow Canvas.png)
+
+
+
+---
+
+## 🧱 Folder Structure
+
+```
+.
+├── Architecture.md       # Detailed flow and system design
+├── README.md             # Project documentation (this file)
+├── /screenshots          # Node and output screenshots
+└── /AI_Automation.json   # n8n workflow export file
+```
+
+---
+
+## 🚀 Key Highlights
+
+✅ **Multi-agent structure** — Each stage modularized as an independent agent.
+✅ **Full data lineage** — Topic → Prompt → Blog → Sheet tracked across nodes.
+✅ **Human-in-the-loop** — Pending review stage in Google Sheets.
+✅ **Plug-and-play architecture** — Swap APIs (e.g., Gemini, Runway) without refactoring.
+✅ **Future-ready** — Can scale to video, Notion, or Slack integrations.
+
+---
+
+## 📘 How to Run
+
+1. Import the `.json` workflow into your **n8n Cloud** or local instance.
+2. Set up credentials for:
+
+   * OpenAI API
+   * Google Sheets
+   * YouTube Data API
+   * (Optional) Gemini / Runway API
+3. Execute the workflow manually or schedule it via the **Cron Trigger**.
+
+---
+
+## 📊 Example Output (Google Sheet)
+
+| Topic                       | Prompt              | Blog Content       | Video Link | Timestamp  | Status         |
+| --------------------------- | ------------------- | ------------------ | ---------- | ---------- | -------------- |
+| AI Process Automation Tools | “Generate blog on…” | Full blog markdown | Pending    | 2025-11-10 | Pending Review |
+
+---
+
+## Loom Link For Demo
+
+https://www.loom.com/share/91f5a17df2c54bf78622eede302cdd43
+
+## 🧩 Author
+
+Arti Rani— AI Automation Engineer
+📧 artirani.com@hotmail.com
+💼 https://linkedin.com/raniarti
+
+---
+
+## 🏁 License
+
+MIT License © 2025 Arti Rani
+You are free to fork, modify, and build on this workflow.
+
