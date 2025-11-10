@@ -15,7 +15,7 @@ This project demonstrates a **modular multi-agent system** built using **n8n**, 
 
 Each agent acts as an autonomous component passing structured data downstream — simulating a scalable AI orchestration architecture.
 
-##### **Link for workflow json:**https://drive.google.com/drive/folders/1CUm13o-X8XpJiveO6-X1G2I_CDuXOknj?usp=sharing
+**Link for workflow json:** https://drive.google.com/drive/folders/1CUm13o-X8XpJiveO6-X1G2I_CDuXOknj?usp=sharing
 
 **Spreadsheet link:** https://docs.google.com/spreadsheets/d/1p_dsc8N7aWOCTcm4kg6UECUX3yWpmPP0cT-3xRPLgJQ/edit?gid=0#gid=0
 
@@ -35,44 +35,15 @@ Each agent acts as an autonomous component passing structured data downstream �
 ---
 
 ## 🧩 Workflow Architecture
+<table>
+  <tr>
+    <td><img src="screenshots/Architecture.png" width="400"></td>
+    <td><img src="screenshots/Architecture0.png" width="400"></td>
+    <td><img src="screenshots/Architecture1.png" width="400"></td>
+    <td><img src="screenshots/Architecture2.png" width="400"></td>
+  </tr>
+</table>
 
-```flow
-st=>start: Trigger (Manual / Schedule)
-init=>operation: InitPayload
-split=>operation: SourceSplitter
-route=>condition: RouteBySource?
-gt=>operation: HTTP Request\nGoogle Trends (RSS)
-yt=>operation: HTTP Request\nYouTube Data API
-parseGT=>operation: ParseTrendsTopics
-parseYT=>operation: ParseYouTubeVideos
-merge=>operation: MergeSources
-dedupe=>operation: DeduplicateAndRank
-expand=>operation: ExpandTopics
-batch=>operation: SplitInBatches (size=1)
-prompt=>operation: PromptGenerator (OpenAI)
-parsePrompt=>operation: ParsePrompts
-blogCreate=>operation: BlogCreator (OpenAI)
-parseBlog=>operation: ParseBlogOutput
-addKey=>operation: AddMergeKey
-sheetAppend=>operation: SheetAppend_ContentRow (Google Sheets)
-mergeFallback=>operation: MergeManualFallback
-capture=>operation: CaptureSheetRow
-videoSubmit=>operation: VideoSubmit (Mock)
-poll=>operation: PollVideoStatus
-fetch=>operation: FetchVideoResult
-collate=>operation: CollateContent
-sheetUpdate=>operation: SheetUpdateRow
-notify=>operation: NotifyReviewer
-end=>end: Done
-
-st->init->split->route
-route(yes)->gt->parseGT->merge
-route(no)->yt->parseYT->merge
-merge->dedupe->expand->batch->prompt->parsePrompt->blogCreate->parseBlog->addKey->sheetAppend
-sheetAppend->mergeFallback->capture->videoSubmit->poll
-poll(yes)->fetch->collate->sheetUpdate->notify->end
-poll(no)->poll
-```
 
 ---
 
@@ -89,7 +60,18 @@ poll(no)->poll
 
 ## 📸 Screenshots
 
-![Workflow Canvas](/media/artir/Data1/coding/projects/Company_Assessments/Aviara_Labs/Pipeline&Docs/screenshots/Workflow Canvas.png)
+<table>
+  <tr>
+    <td><img src="screenshots/Workflow Canvas.png" width="400"></td>
+    <td><img src="screenshots/Payload.png" width="400"></td>
+    <td><img src="screenshots/SourceSplitter.png" width="400"></td>
+    <td><img src="screenshots/ParseTrends.png" width="400"></td>
+    <td><img src="screenshots/ParsedYt.png" width="400"></td>
+    <td><img src="screenshots/PromptGenerator.png" width="400"></td>
+    <td><img src="screenshots/ParseBlog.png" width="400"></td>
+  </tr>
+</table>
+
 
 
 
@@ -99,10 +81,9 @@ poll(no)->poll
 
 ```
 .
-├── Architecture.md       # Detailed flow and system design
+├── Architecture.md       # Detailed flow, system design & n8n workflow link
 ├── README.md             # Project documentation (this file)
-├── /screenshots          # Node and output screenshots
-└── /AI_Automation.json   # n8n workflow export file
+└── /screenshots          # Node and output screenshots
 ```
 
 ---
